@@ -46,3 +46,34 @@ void pyramToJson(int n, pyramNeuron* neurons, const std::string& filename) {
     file.close();
     std::cout << "Saved to " << filename << std::endl;
 }
+
+std::string interNeuronToJson(const interNeuron& n) {
+    std::ostringstream oss;
+    oss << std::setprecision(6) << std::fixed;
+    oss << "{"
+        << "\"V\":" << n.V << ","
+        << "\"m\":" << n.m << ","
+        << "\"h\":" << n.h << ","
+        << "\"n\":" << n.n << ","
+        << "\"w\":" << n.w
+        << "}";
+    return oss.str();
+}
+
+void interToJson(int n, interNeuron* neurons, const std::string& filename) {
+    std::ofstream file(filename);
+    if (!file.is_open()) {
+        std::cerr << "Error opening file!" << std::endl;
+        return;
+    }
+
+    file << "[";
+    for (size_t i = 0; i < n; ++i) {
+        file << interNeuronToJson(neurons[i]);
+        if (i != n - 1) file << ",";
+    }
+    file << "]";
+
+    file.close();
+    std::cout << "Saved to " << filename << std::endl;
+}
