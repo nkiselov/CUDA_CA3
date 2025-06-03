@@ -49,7 +49,6 @@ const float vK = -90.0;
 const float I_ext = 0.0;
 
 const float exc_tau = 2.0;
-const float inh_tau = 2.0;
 
 __global__
 void interStep(int n, float h, interNeuron* vin, interReceptor* vir)
@@ -79,6 +78,9 @@ void interStep(int n, float h, interNeuron* vin, interReceptor* vir)
     in->h += h * (ah(in->V)/h_mul-in->h)/(1/h_mul+h);
     in->n += h * (an(in->V)/n_mul-in->n)/(1/n_mul+h);
     in->w += h * (w_inf(in->V)-in->w)/(w_tau+h);
+
+    ir->g_E += h * (-ir->g_E) / (exc_tau + h);
+    ir->fire = in->V<=0.0 && V_1>0.0;
 
     in->V = V_1;
 }

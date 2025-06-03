@@ -99,7 +99,7 @@ const float exc_tau = 2.0;
 const float inh_tau = 2.0;
 
 const float noise_freq = 1;
-const float noise_mag = 0.2;
+const float noise_mag = 0;//0.2;
 const float noise_tau = 0.5;
 
 __device__

@@ -1,13 +1,10 @@
-#include <iostream>
-#include "interNeuron.cu"
-#include "pyramNeuron.cu"
-#include "io.cpp"
+#include "headers.h"
 
 int main(void)
 {
     const int N = 1<<10;
     const int BLOCK = 256;
-    const int ITERS = 1000;
+    const int ITERS = 10000;
 
     interNeuron *vin, *d_vin;
     vin = (interNeuron*)malloc(N*sizeof(interNeuron));
@@ -24,12 +21,12 @@ int main(void)
     result = (interNeuron*)malloc(ITERS*sizeof(interNeuron));
     for(int i=0; i<ITERS; i++){
       if(i==200){
-        for(int i=0; i<N; i++) vir[i].g_E+=0.275;
+        for(int i=0; i<N; i++) vir[i].g_E+=1;
       }
 
       cudaMemcpy(d_vir, vir, N*sizeof(interReceptor), cudaMemcpyHostToDevice);
       cudaMemcpy(d_vin, vin, N*sizeof(interNeuron), cudaMemcpyHostToDevice);
-      
+
       inter::interStep<<<(N+BLOCK-1)/BLOCK, BLOCK>>>(N, 0.1f, d_vin, d_vir);
 
       cudaMemcpy(vin, d_vin, N*sizeof(interNeuron), cudaMemcpyDeviceToHost);

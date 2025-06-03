@@ -77,3 +77,44 @@ void interToJson(int n, interNeuron* neurons, const std::string& filename) {
     file.close();
     std::cout << "Saved to " << filename << std::endl;
 }
+
+void saveVectorToJson(const std::vector<std::vector<std::vector<float>>>& data, const std::string& filename) {
+    std::ofstream outfile(filename);
+    if (!outfile.is_open()) {
+        throw std::runtime_error("Failed to open file for writing.");
+    }
+
+    outfile << "[\n"; // Start outer array
+
+    for (size_t i = 0; i < data.size(); ++i) {
+        const auto& outer = data[i];
+        outfile << "  [\n"; // Start middle array
+
+        for (size_t j = 0; j < outer.size(); ++j) {
+            const auto& middle = outer[j];
+            outfile << "    [ "; // Start inner array
+
+            for (size_t k = 0; k < middle.size(); ++k) {
+                outfile << std::fixed << std::setprecision(4) << middle[k];
+                if (k < middle.size() - 1) {
+                    outfile << ", ";
+                }
+            }
+
+            outfile << " ]"; // Close inner array
+            if (j < outer.size() - 1) {
+                outfile << ",";
+            }
+            outfile << "\n";
+        }
+
+        outfile << "  ]"; // Close middle array
+        if (i < data.size() - 1) {
+            outfile << ",";
+        }
+        outfile << "\n";
+    }
+
+    outfile << "]"; // Close outer array
+    outfile.close();
+}

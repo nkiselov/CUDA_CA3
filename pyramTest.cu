@@ -1,7 +1,4 @@
-#include <iostream>
-#include "pyramNeuron.cu"
-#include "interNeuron.cu"
-#include "io.cpp"
+#include "headers.h"
 
 int main(void)
 {
